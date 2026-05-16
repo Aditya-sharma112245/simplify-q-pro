@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Intelligence Audit — Free Company Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0D1B2A;
+      --mid:     #1B2A3D;
+      --electric:#2563EB;
+      --cyan:    #06B6D4;
+      --slate:   #475569;
+      --light:   #F8FAFF;
+      --border:  #E2E8F0;
+      --white:   #FFFFFF;
+      --accent:  #7C3AED;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--light);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* ── Layout ─────────────────────────────────────── */
+    .wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Left Panel ─────────────────────────────────── */
+    .panel-left {
+      background: var(--navy);
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-left::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .panel-left::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .brand-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(37,99,235,0.15);
+      border: 1px solid rgba(37,99,235,0.3);
+      color: #60A5FA;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      width: fit-content;
+      margin-bottom: 32px;
+    }
+    .brand-tag span { width: 6px; height: 6px; background: #60A5FA; border-radius: 50%; display: inline-block; }
+
+    .panel-left h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 3vw, 46px);
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .panel-left h1 em {
+      font-style: italic;
+      color: #60A5FA;
+    }
+
+    .panel-left p {
+      color: #94A3B8;
+      font-size: 15px;
+      line-height: 1.75;
+      margin-bottom: 40px;
+      max-width: 400px;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .feature-icon {
+      width: 36px; height: 36px;
+      background: rgba(37,99,235,0.12);
+      border: 1px solid rgba(37,99,235,0.25);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .feature-text strong { display: block; color: white; font-size: 14px; margin-bottom: 2px; }
+    .feature-text span { color: #64748B; font-size: 13px; }
+
+    .trust-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .trust-badge {
+      display: flex; align-items: center; gap: 6px;
+      color: #64748B; font-size: 12px;
+    }
+    .trust-badge svg { width: 14px; height: 14px; fill: #22C55E; }
+
+    /* ── Right Panel ─────────────────────────────────── */
+    .panel-right {
+      background: white;
+      padding: 60px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .form-header {
+      margin-bottom: 32px;
+    }
+    .form-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .form-header p {
+      color: var(--slate);
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    label .req { color: var(--electric); margin-left: 2px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--navy);
+      background: var(--light);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--electric);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+      background: white;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    select { cursor: pointer; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--electric);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .submit-btn:hover { background: #1D4ED8; }
+    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn.loading { background: #93A3B8; cursor: not-allowed; }
+
+    .submit-btn .btn-text { transition: opacity 0.2s; }
+    .submit-btn .btn-loader {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+    }
+    .submit-btn.loading .btn-text { opacity: 0; }
+    .submit-btn.loading .btn-loader { display: flex; }
+
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Success State ───────────────────────────────── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .success-state.show { display: block; }
+    .form-state.hide { display: none; }
+
+    .success-icon {
+      width: 72px; height: 72px;
+      background: #ECFDF5;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+    }
+    .success-state h3 {
+      font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 10px;
+    }
+    .success-state p {
+      color: var(--slate); font-size: 14px; line-height: 1.7;
+    }
+    .success-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 28px;
+      text-align: left;
+    }
+    .step {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: var(--light);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--slate);
+    }
+    .step-num {
+      width: 24px; height: 24px;
+      background: var(--electric);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── Error Banner ────────────────────────────────── */
+    .error-banner {
+      display: none;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #DC2626;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .error-banner.show { display: block; }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 820px) {
+      .wrapper { grid-template-columns: 1fr; }
+      .panel-left { padding: 40px 24px; }
+      .panel-right { padding: 40px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- ── Left Panel ── -->
+  <div class="panel-left">
+    <div class="brand-tag"><span></span> Free Business Audit</div>
+
+    <h1>Get Your <em>Personalized</em><br>Business Intelligence Report</h1>
+    <p>Submit your company details and receive a fully researched, AI-powered audit report — delivered to your inbox within minutes.</p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-text">
+          <strong>Deep Company Research</strong>
+          <span>We scrape public sources and synthesize intelligence specific to your business</span>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <div class="feature-text">
+          <strong>Detailed Audit Findings</strong>
+          <span>5 key areas analyzed with impact ratings and actionable recommendations</span>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🚀</div>
+        <div class="feature-text">
+          <strong>Quick Wins & Opportunities</strong>
+          <span>Immediate actions you can take to accelerate growth</span>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📄</div>
+        <div class="feature-text">
+          <strong>Professional PDF Report</strong>
+          <span>A polished, branded document delivered directly to your email</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-bar">
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V7L12 2z"/></svg>
+        Secure & Confidential
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        No spam, ever
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        Ready in minutes
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Right Panel ── -->
+  <div class="panel-right">
+    <div class="form-container">
+
+      <!-- Success State -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">✅</div>
+        <h3>Report is Being Prepared!</h3>
+        <p>Our intelligence engine is researching <strong id="successCompany"></strong> right now. You'll receive your personalized audit at <strong id="successEmail"></strong> within a few minutes.</p>
+        <div class="success-steps">
+          <div class="step"><div class="step-num">1</div>Enriching company data from public sources</div>
+          <div class="step"><div class="step-num">2</div>AI is generating personalized insights</div>
+          <div class="step"><div class="step-num">3</div>Building your professional PDF report</div>
+          <div class="step"><div class="step-num">4</div>Sending to your inbox</div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="form-state" id="formState">
+        <div class="form-header">
+          <h2>Request Your Free Audit</h2>
+          <p>Takes 2 minutes. Report delivered in ~5 minutes.</p>
+        </div>
+
+        <div class="error-banner" id="errorBanner"></div>
+
+        <form id="leadForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" name="name" placeholder="Jane Smith" required>
+            </div>
+            <div class="form-group">
+              <label>Work Email <span class="req">*</span></label>
+              <input type="email" name="email" placeholder="jane@company.com" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Company Name <span class="req">*</span></label>
+              <input type="text" name="company" placeholder="Acme Inc." required>
+            </div>
+            <div class="form-group">
+              <label>Your Role</label>
+              <input type="text" name="role" placeholder="CEO, Head of Growth...">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Company Website</label>
+            <input type="url" name="website" placeholder="https://yourcompany.com">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Industry</label>
+              <select name="industry">
+                <option value="">Select industry</option>
+                <option>SaaS / Software</option>
+                <option>Finance / Fintech</option>
+                <option>E-commerce / Retail</option>
+                <option>Healthcare</option>
+                <option>Consulting / Professional Services</option>
+                <option>Real Estate</option>
+                <option>Manufacturing</option>
+                <option>Education / EdTech</option>
+                <option>Marketing / Agency</option>
+                <option>Logistics / Supply Chain</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Company Size</label>
+              <select name="company_size">
+                <option value="">Select size</option>
+                <option>1-10 employees</option>
+                <option>11-50 employees</option>
+                <option>51-200 employees</option>
+                <option>201-500 employees</option>
+                <option>500+ employees</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Biggest Business Challenge</label>
+            <textarea name="challenge" placeholder="e.g. We're struggling to scale our lead gen beyond referrals and need a repeatable process..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <span class="btn-text">Generate My Free Report →</span>
+            <span class="btn-loader"><div class="spinner"></div></span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const form = document.getElementById('leadForm');
+  const btn = document.getElementById('submitBtn');
+  const errorBanner = document.getElementById('errorBanner');
+  const formState = document.getElementById('formState');
+  const successState = document.getElementById('successState');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBanner.classList.remove('show');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    const formData = new FormData(form);
+    const company = formData.get('company');
+    const email = formData.get('email');
+
+    try {
+      const res = await fetch('/submit-lead', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.status === 'success') {
+        document.getElementById('successCompany').textContent = company;
+        document.getElementById('successEmail').textContent = email;
+        formState.classList.add('hide');
+        successState.classList.add('show');
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
+    } catch (err) {
+      errorBanner.textContent = `Something went wrong: ${err.message}. Please try again.`;
+      errorBanner.classList.add('show');
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
