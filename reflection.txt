@@ -1,0 +1,26 @@
+# SimplifIQ Technical Assessment - Reflection
+
+## 1. Project Overview
+I have built an end-to-end Lead Automation System that transforms a raw form submission into a high-fidelity, research-backed business intelligence report. The system handles data validation, multi-source company enrichment, AI-driven synthesis, professional PDF generation, and automated delivery.
+
+## 2. Engineering Approach & Decisions
+- **Framework Choice**: I chose FastAPI for its high performance and native support for asynchronous background tasks. This ensures that the user receives an immediate response while the heavy research and PDF generation happen in the background.
+- **Enrichment Strategy**: Instead of relying on a single (often expensive) API, I built a multi-threaded enrichment engine that scrapes the company's website directly and gathers real-time news/LinkedIn signals via DuckDuckGo. This provides a broader context for the AI.
+- **AI Synthesis**: I utilized Claude Sonnet 4 to act as a "Senior Business Analyst." The prompt engineering focuses on extracting "Headline Insights" that go beyond generic data, aiming to provide immediate value to the prospect.
+- **PDF Generation**: I opted for ReportLab over HTML-to-PDF tools. While harder to style, ReportLab has zero system dependencies (no need for a headless browser like Chromium), making the system much easier to deploy in serverless or containerized environments.
+
+## 3. Challenges & Problem Solving
+- **Scraping Limitations**: Many modern websites block simple scrapers. I implemented a robust fallback mechanism: if direct scraping fails, the system shifts to using search snippets and news data. If all external sources are unreachable, the system uses industry-standard logic based on the user's input fields to ensure a report is still delivered.
+- **PDF Personalization**: Balancing a professional "template" look with truly dynamic content was a challenge. I solved this by creating a modular PDF builder where sections (Executive Summary, Audit Findings, Growth Opportunities) are only rendered if the AI successfully generates relevant data.
+
+## 4. Use of AI Tools
+AI was used responsibly as a collaborative partner:
+- **Ideation**: To brainstorm the most impactful "Audit Areas" for a B2B context.
+- **Drafting**: To assist in generating the complex ReportLab boilerplate code for tables and cards.
+- **Synthesis**: The core "Intelligence" of the app is powered by LLM-driven data synthesis, which I verified through multiple test cases to ensure accuracy and tone.
+
+## 5. Future Improvements
+If I had more time, I would:
+1. Implement a persistent database (PostgreSQL) to track lead history and avoid re-enriching the same company.
+2. Add a message queue (Redis/Celery) for better scaling and retry logic if an API or SMTP server is temporarily down.
+3. Integrate paid data providers like Clearbit or Apollo.io to supplement the free scraping results for higher data accuracy.
